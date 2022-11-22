@@ -32,4 +32,10 @@ public class PurseServiceImpl implements PurseService {
         }
         purseRepository.save(purse);
     }
+    @Override
+    public void updateSaldo(float total, String user) {
+        Purse purse1 = this.findByUser(user);
+        purse1.setSaldo(total);
+        purseRepository.save(purse1);
+    }
 }

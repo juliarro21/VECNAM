@@ -22,10 +22,13 @@ import com.apuestas.Apuestas.model.Bets;
 import com.apuestas.Apuestas.model.Event;
 import com.apuestas.Apuestas.model.EventTeam;
 import com.apuestas.Apuestas.model.Team;
+import com.apuestas.Apuestas.model.User;
 import com.apuestas.Apuestas.service.EventTeamService;
+import com.apuestas.Apuestas.service.PurseService;
 import com.apuestas.Apuestas.service.BetsService;
 import com.apuestas.Apuestas.service.EventService;
 import com.apuestas.Apuestas.service.TeamService;
+import com.apuestas.Apuestas.service.UserService;
 
 @RestController 
 @RequestMapping("/eventos")
@@ -38,6 +41,10 @@ public class EventController {
     private EventTeamService eventEquiposService;
     @Autowired
     private BetsService betsService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PurseService purseService;
     @RequestMapping(value= {"/listar"}, method=RequestMethod.GET)
     public ModelAndView listar() {
         ModelAndView model = new ModelAndView();
@@ -95,17 +102,40 @@ public class EventController {
          for(EventTeam eventTeam : eventTeams) {
                 teams.add(eventTeam.getTeams());
         } 
+        model.addObject("mensage", "");
         model.addObject("teams", teams);
         model.addObject("event", eventService.findById(id));
         model.setViewName("event/Bets");
         return model;
     }
     @RequestMapping(value="/apostar", method=RequestMethod.POST)
-    public ModelAndView apostar(@RequestParam("id") int id,@RequestParam("idTeam") int idTeam,@RequestParam("monto") int monto) {
+    public ModelAndView apostar(@RequestParam("id") int id,@ModelAttribute("bets") Bets bets) {
         ModelAndView model = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String mensage="";
+        if(purseService.findByUser(auth.getName())==null || purseService.findByUser(auth.getName()).getSaldo()<bets.getCantidad()) {
+           mensage="No tiene saldo suficiente";
+        }else {
+            bets.setEventos_equipos(eventEquiposService.findByIdEventAndIdTeams(id, bets.getTeam()));
+            bets.setUsers(userService.findByUsuario(auth.getName()));   
+            betsService.create(bets); 
+            float total = purseService.findByUser(auth.getName()).getSaldo()-bets.getCantidad();
+            
+            purseService.updateSaldo(total, auth.getName());
+            mensage="Apostado con exito";
+        }
+        final List<EventTeam> eventTeams =  eventEquiposService.findByIdEventos(id);
+        List <Team> teams= new ArrayList<Team>();
+         for(EventTeam eventTeam : eventTeams) {
+                teams.add(eventTeam.getTeams());
+        }
+        model.addObject("teams", teams);
+
+        model.addObject("mensage", mensage);
         model.addObject("event", eventService.findById(id));
         model.setViewName("event/Bets");
         return model;
+        
     }
     @RequestMapping(value="/ganador", method=RequestMethod.POST)
     public ModelAndView ganador(@RequestParam("id") int id, @ModelAttribute("event") Event event) {
@@ -114,7 +144,7 @@ public class EventController {
         ModelAndView model = new ModelAndView();
         if(event != null) {
             Event eventDetail = eventService.findById(id);
-            eventDetail.setGanador(id);
+            eventDetail.setGanador(event.getGanador());
             eventService.editar(eventDetail);
             model.addObject("mensage", "Ganador asignado con exito");
         }else {

@@ -40,4 +40,17 @@ public class PurseTest {
         //Comprueba que la billetera se encontro
         assert purse!=null;
     }
+    @Test
+    //Prueba de actualizar saldo
+    @Rollback(false)
+    public void updateSaldo() {
+        //Busca la billetera
+        Purse purse = purseRepository.findByUser(2);
+        //Actualiza el saldo
+        purse.setSaldo(200);
+        //Guarda la billetera
+        Purse purseSave=purseRepository.save(purse);
+        //Comprueba que la billetera se guardo
+        assert purseSave!=null;
+    }
 }

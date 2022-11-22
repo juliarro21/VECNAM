@@ -20,5 +20,7 @@ public class eventEquiposServiceImple implements EventTeamService {
         public List<EventTeam> findByIdEventos(int idEventos) {
             return eventEquiposRepository.findByIdEventos(idEventos);
         }
-    
+        public EventTeam findByIdEventAndIdTeams(int idEventos, int idTeams) {
+            return eventEquiposRepository.findByIdEventAndIdTeams(idEventos, idTeams);
+        }
 }

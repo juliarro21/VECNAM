@@ -24,10 +24,6 @@ public class BetsServiceImple implements BetsService {
             // TODO Auto-generated method stub
             return null;
         }
-
-        /* public List<Bets> findByIdEventos(int idEventos) {
-            return betsRepository.findByIdEventos(idEventos);
-        } */
         
     }
 

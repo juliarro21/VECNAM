@@ -10,9 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "apuestas")
@@ -21,15 +21,17 @@ public class Bets {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     private User users;
-    @OneToMany(cascade = CascadeType.ALL)
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_evento_equipo", referencedColumnName = "id")
     private EventTeam eventos_equipos;
 
     @Column(name = "cantidad", nullable = false)
-    private int cantidad;
+    private float cantidad;
+
+    private int team;
     public int getId() {
         return id;
     }
@@ -48,11 +50,16 @@ public class Bets {
     public void setEventos_equipos(EventTeam eventos_equipos) {
         this.eventos_equipos = eventos_equipos;
     }
-    public int getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
-
+    public void setTeam(int team) {
+     this.team=team;   
+    }
+    public int getTeam() {
+        return team;
+    }
 }

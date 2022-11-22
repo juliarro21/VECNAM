@@ -47,12 +47,16 @@
                             </div>
                         </div>
                         <h5 class="text-center  mt-2">EQUIPOS</h5>
-                        <form  th:action="@{/eventos/ganador?id=}+${event.id}"  method="POST" th:object="${event}">
+                        <form  th:action="@{/eventos/apostar?id=}+${event.id}"  method="POST" th:object="${event}">
+                            <!-- Alert -->
+                            <div th:class="${mensage=='No tiene saldo suficiente'?'alert alert-danger':'alert alert-success'}" th:if="${mensage!=''}" role="alert">
+                                <p th:text="${mensage}"></p>
+                            </div>
                             <div class="row my-2">
                                 <div class="card card-body col-md-3 col-12 mx-2" th:each="team: ${teams}"  style="width: 18rem;">
                                     <div class="row  my-auto">
                                         <div class="col-md-2  my-auto">
-                                            <input type="radio" name="ganador" file="*{ganador}" th:value="${team.id}" th:id="${team.id}" th:disabled="${event.ganador != 0}">
+                                            <input type="radio" name="team" file="*{team}" th:value="${team.id}" th:id="${team.id}" th:disabled="${event.ganador != 0}">
                                         </div>
                                        <div class="col-md-7"> <strong>Nombre: </strong><p th:text="${team.nombre}"></p></div>
                                     </div> 
@@ -61,7 +65,7 @@
                                         <label for="cantidad" class="my-2">Valor de la apuesta
                                         </label>
                                        
-                                        <input type="number" name="monto" file="*{monto}" th:disabled="${event.ganador != 0}" class="form-control">
+                                        <input type="number" name="cantidad" file="*{cantidad}" th:disabled="${event.ganador != 0}" class="form-control">
                                     </div>
                             </div>
                             <div>
