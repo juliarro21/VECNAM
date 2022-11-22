@@ -47,7 +47,6 @@
                             </div>
                         </div>
                         <h5 class="text-center  mt-2">EQUIPOS</h5>
-                        <form  th:action="@{/eventos/apostar?id=}+${event.id}"  method="POST" th:object="${event}">
                         <form  th:action="@{/eventos/ganador?id=}+${event.id}"  method="POST" th:object="${event}">
                             <div class="row my-2">
                                 <div class="card card-body col-md-3 col-12 mx-2" th:each="team: ${teams}"  style="width: 18rem;">
@@ -63,7 +62,6 @@
                                         </label>
                                        
                                         <input type="number" name="monto" file="*{monto}" th:disabled="${event.ganador != 0}" class="form-control">
-                                        <input type="number" name="cantidad" file="*{cantidad}" th:disabled="${event.ganador != 0}" class="form-control">
                                     </div>
                             </div>
                             <div>

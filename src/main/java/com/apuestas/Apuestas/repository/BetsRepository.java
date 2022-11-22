@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.apuestas.Apuestas.model.Bets;
 @Repository("betsRepository")
 
-
 public interface BetsRepository extends JpaRepository<Bets, Integer> {
     Bets findById(int id);
     
