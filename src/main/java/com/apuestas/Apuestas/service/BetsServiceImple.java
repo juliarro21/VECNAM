@@ -13,17 +13,14 @@ import com.apuestas.Apuestas.repository.BetsRepository;
 public class BetsServiceImple implements BetsService {
     @Autowired
     private BetsRepository betsRepository;
-    
         @Override
         public void create(Bets bet) {
             betsRepository.save(bet);
         }
 
-        @Override
-        public List<Bets> findAll() {
-            // TODO Auto-generated method stub
-            return null;
+        public List<Bets> findByUser(int iduser) {
+            return betsRepository.findByUser(iduser);
+            
         }
-        
     }
 

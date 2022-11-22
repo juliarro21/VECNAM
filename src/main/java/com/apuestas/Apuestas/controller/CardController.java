@@ -22,7 +22,10 @@ public class CardController {
     private CardsService cardsService;
     @RequestMapping(value = "/pagos_tajeta", method = RequestMethod.GET)
     public ModelAndView paid() {
+        
         ModelAndView model = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addObject("role", auth.getAuthorities().toString());
         model.addObject("mensage","");
         model.setViewName("user/card");
         return model;
@@ -33,6 +36,7 @@ public class CardController {
      Authentication auth = SecurityContextHolder.getContext().getAuthentication();
      cards.setUsers(userService.findByUsuario(auth.getName()));
      cardsService.create(cards);
+     model.addObject("role", auth.getAuthorities().toString());
      model.addObject("mensage"," Tarjeta registrada con exito");
      model.setViewName("user/card");
      return model;

@@ -22,6 +22,9 @@
               <li class="nav-item">
                 <a class="nav-link text-white" href="/eventos/listar" >Eventos</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/mis_apuestas" th:if="${role}=='[USER]'">Mis apuestas</a>
+            </li>
             </ul>
             <div class="d-flex" >
                 <a th:href="@{/logout}" class="btn btn-outline-light my-2 my-sm-0">Cerrar Sesión</a>

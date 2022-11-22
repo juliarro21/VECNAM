@@ -17,10 +17,13 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 
               <li class="nav-item" >
-                <a class="nav-link text-white" href="/monedero" >Monedero</a>
+                <a class="nav-link text-white" href="/monedero" th:if="${role}=='[USER]'">Monedero</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-white" href="/eventos/listar" >Eventos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="/mis_apuestas" th:if="${role}=='[USER]'">Mis apuestas</a>
             </li>
             </ul>
             <div class="d-flex" >

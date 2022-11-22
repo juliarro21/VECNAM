@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.apuestas.Apuestas.model.Purse;
 import com.apuestas.Apuestas.model.User;
+import com.apuestas.Apuestas.service.BetsService;
 import com.apuestas.Apuestas.service.CardsService;
 import com.apuestas.Apuestas.service.PurseService;
 import com.apuestas.Apuestas.service.UserService;
@@ -28,6 +29,8 @@ public class UserController {
  private UserService userService;
  @Autowired
  private CardsService cardsService;
+ @Autowired
+ private BetsService betsService;
  @RequestMapping(value= {"/", "/login"}, method=RequestMethod.GET)
  public ModelAndView login() {
   ModelAndView model = new ModelAndView();
@@ -71,7 +74,7 @@ public class UserController {
     public ModelAndView monedero() {
     ModelAndView model = new ModelAndView();
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    
+    model.addObject("role", auth.getAuthorities().toString());
     model.addObject("cards", cardsService.findByUser(userService.findByUsuario(auth.getName()).getId()));
     model.addObject("monedero", purseService.findByUser(auth.getName()));
     model.addObject("userName", "Bienvenido " + auth.getName());
@@ -96,6 +99,15 @@ public class UserController {
   model.setViewName("errors/access_denied");
   return model;
  }
+ @RequestMapping(value= {"/mis_apuestas"}, method=RequestMethod.GET)
+ public ModelAndView misApuestas() {
+  ModelAndView model = new ModelAndView();
+  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+  model.addObject("bets", betsService.findByUser(userService.findByUsuario(auth.getName()).getId()));
+  model.addObject("role", auth.getAuthorities().toString());
+  model.setViewName("user/winnerEvents");
+  return model;
+ }
  
 }

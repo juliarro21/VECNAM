@@ -22,7 +22,6 @@ import com.apuestas.Apuestas.model.Bets;
 import com.apuestas.Apuestas.model.Event;
 import com.apuestas.Apuestas.model.EventTeam;
 import com.apuestas.Apuestas.model.Team;
-import com.apuestas.Apuestas.model.User;
 import com.apuestas.Apuestas.service.EventTeamService;
 import com.apuestas.Apuestas.service.PurseService;
 import com.apuestas.Apuestas.service.BetsService;
@@ -75,6 +74,7 @@ public class EventController {
             eventService.create(event);
             model.addObject("mensage", "Evento creado con exito");
         }
+        model.addObject("role", auth.getAuthorities().toString());
         model.addObject("teams", teamService.findAll());
         model.addObject("role", auth.getAuthorities().toString());
         model.addObject("eventos", eventService.findAll());
@@ -89,6 +89,9 @@ public class EventController {
          for(EventTeam eventTeam : eventTeams) {
                 teams.add(eventTeam.getTeams());
         } 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        model.addObject("role", auth.getAuthorities().toString());
         model.addObject("teams", teams);
         model.addObject("event", eventService.findById(id));
         model.setViewName("event/winner");
@@ -102,6 +105,8 @@ public class EventController {
          for(EventTeam eventTeam : eventTeams) {
                 teams.add(eventTeam.getTeams());
         } 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        model.addObject("role", auth.getAuthorities().toString());
         model.addObject("mensage", "");
         model.addObject("teams", teams);
         model.addObject("event", eventService.findById(id));
@@ -130,7 +135,7 @@ public class EventController {
                 teams.add(eventTeam.getTeams());
         }
         model.addObject("teams", teams);
-
+        model.addObject("role", auth.getAuthorities().toString());
         model.addObject("mensage", mensage);
         model.addObject("event", eventService.findById(id));
         model.setViewName("event/Bets");
@@ -144,12 +149,13 @@ public class EventController {
         ModelAndView model = new ModelAndView();
         if(event != null) {
             Event eventDetail = eventService.findById(id);
-            eventDetail.setGanador(event.getGanador());
+            eventDetail.setGanador(eventEquiposService.findByIdEventAndIdTeams(id, event.getGanador()).getId());
             eventService.editar(eventDetail);
             model.addObject("mensage", "Ganador asignado con exito");
         }else {
             model.addObject("mensage", "Error asignando el ganador");
         }
+        model.addObject("role", auth.getAuthorities().toString());
         model.addObject("teams", teamService.findAll());
         model.addObject("role", auth.getAuthorities().toString());
         model.addObject("eventos", eventService.findAll());

@@ -1,6 +1,5 @@
 package com.apuestas.Apuestas.model;
 
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

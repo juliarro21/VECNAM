@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Home</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+            crossorigin="anonymous">
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" href="/">APUESTAS</a>
+                <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse"
+                    id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/monedero"
+                                th:if="${role}=='[USER]'">Monedero</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white"
+                                href="/eventos/listar">Eventos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/mis_apuestas"
+                                th:if="${role}=='[USER]'">Mis apuestas</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <a th:href="@{/logout}" class="btn btn-outline-light
+                            my-2 my-sm-0">Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- End Header -->
+        <div class="container ">
+            <!-- Crar nuevos eventos -->
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-secondary mt-3"
+                    data-bs-toggle="modal" data-bs-target="#NuevoEvento"
+                    th:if="${role}== '[ADMIN]'">Nuevo evento</button>
+            </div>
+            <h3 class="text-center mt-3">EVENTOS ACTIVOS</h3>
+            <!-- Enventos activos -->
+            <div class="row gy-2 gx-2">
+                <div th:each="bet: ${bets}" class="col-md-3 col-12"
+                    th:if="${bet.getEventos_equipos().getEvents().ganador==0}">
+                    <div class="card " style="width: 18rem;">
+                        <img class="card-img-top"
+                            src="https://www.directv.com.co/content/dam/public-sites/cl/sports-pdp-template/rectangle-group-6-mask.png"
+                            alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title text-center"
+                                th:text="${bet.getEventos_equipos().getEvents().nombre}"></h5>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <strong>Valor de la apuesta: </strong><p
+                                        th:text="${'$'+bet.cantidad}"></p>
+                                </div>
+                                <div class="col-md-12">
+                                    <strong>Equipo de apuesta: </strong><p
+                                        th:text="${bet.getEventos_equipos().getTeams().nombre}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Fecha: </strong><p
+                                        th:text="${bet.getEventos_equipos().getEvents().fecha}"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Hora: </strong><p
+                                        th:text="${bet.getEventos_equipos().getEvents().hora}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-center mt-3">EVENTOS TERMINADOS</h3>
+                <!-- Enventos terminados -->
+                <div class="row gy-2 gx-2">
+                    <div th:each="bet: ${bets}" class="col-md-3 col-12"
+                        th:if="${bet.getEventos_equipos().getEvents().ganador!=0}">
+                        <div class="card " style="width: 18rem;">
+                            <img class="card-img-top"
+                                src="https://www.directv.com.co/content/dam/public-sites/cl/sports-pdp-template/rectangle-group-6-mask.png"
+                                alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title text-center"
+                                    th:text="${bet.getEventos_equipos().getEvents().nombre}"></h5>
+                                <div class="row">
+                                    <span th:class="${bet.getEventos_equipos().getEvents().ganador==bet.getEventos_equipos().id?'badge text-bg-success':'badge text-bg-danger'}" th:text="${bet.getEventos_equipos().getEvents().ganador==bet.getEventos_equipos().id?'GANASTE':'PERDISTE'}"></span>
+                                    <div class="col-md-12">
+                                        <strong>Valor de la apuesta: </strong><p
+                                            th:text="${'$'+bet.cantidad}"></p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <strong>Equipo de apuesta: </strong><p
+                                            th:text="${bet.getEventos_equipos().getTeams().nombre}"></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Fecha: </strong><p
+                                            th:text="${bet.getEventos_equipos().getEvents().fecha}"></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Hora: </strong><p
+                                            th:text="${bet.getEventos_equipos().getEvents().hora}"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </body>
+            <script
+                src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+                integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+                crossorigin="anonymous"></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+                integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+                crossorigin="anonymous"></script>
+        </html>
