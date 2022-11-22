@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+ xmlns:th="http://www.thymeleaf.org">
+<head>
+ <title>Home</title>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand text-white" href="/">APUESTAS</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                
+              <li class="nav-item" >
+                <a class="nav-link text-white" href="/monedero" >Monedero</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="/eventos/listar" >Eventos</a>
+            </li>
+            </ul>
+            <div class="d-flex" >
+                <a th:href="@{/logout}" class="btn btn-outline-light my-2 my-sm-0">Cerrar Sesión</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    <!-- End Header -->
+    <div class="container ">
+        
+        <h3 class="text-center mt-3"> DETALLE DEL EVENTO</h3>
+        <!-- Información del evento -->
+                <div class="card "  th:if="${event.ganador ==0}" style="    align-items: center;">
+                    <img class="card-img-top" src="https://www.directv.com.co/content/dam/public-sites/cl/sports-pdp-template/rectangle-group-6-mask.png" style="width: 30%;" alt="Card image cap">
+                    <div class="card-body">
+                        <h3 class="card-title text-center" th:text="${event.nombre}"></h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Fecha: </strong><p th:text="${event.fecha} "></p>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Hora: </strong><p th:text="${event.hora}"></p>
+                            </div>
+                        </div>
+                        <h5 class="text-center  mt-2">EQUIPOS</h5>
+                        <form  th:action="@{/eventos/apostar?id=}+${event.id}"  method="POST" th:object="${event}">
+                        <form  th:action="@{/eventos/ganador?id=}+${event.id}"  method="POST" th:object="${event}">
+                            <div class="row my-2">
+                                <div class="card card-body col-md-3 col-12 mx-2" th:each="team: ${teams}"  style="width: 18rem;">
+                                    <div class="row  my-auto">
+                                        <div class="col-md-2  my-auto">
+                                            <input type="radio" name="ganador" file="*{ganador}" th:value="${team.id}" th:id="${team.id}" th:disabled="${event.ganador != 0}">
+                                        </div>
+                                       <div class="col-md-7"> <strong>Nombre: </strong><p th:text="${team.nombre}"></p></div>
+                                    </div> 
+                                </div> 
+                                <div class="text-center">
+                                        <label for="cantidad" class="my-2">Valor de la apuesta
+                                        </label>
+                                       
+                                        <input type="number" name="monto" file="*{monto}" th:disabled="${event.ganador != 0}" class="form-control">
+                                        <input type="number" name="cantidad" file="*{cantidad}" th:disabled="${event.ganador != 0}" class="form-control">
+                                    </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-outline-success " type="submit">Apostar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+</html>
